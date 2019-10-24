@@ -3,12 +3,12 @@ class Note {
   int _id;
   String _title;
   String _description;
-  String _date;
-  int _priority;
+  String _store;
+  String _product;
 
-  Note(this._title, this._date, this._priority, [this._description]);
+  Note(this._title, this._store, this._product, [this._description]);
 
-  Note.withId(this._id, this._title, this._date, this._priority, [this._description]);
+  Note.withId(this._id, this._title, this._store, this._product, [this._description]);
 
   int get id => _id;
 
@@ -16,9 +16,9 @@ class Note {
 
   String get description => _description;
 
-  int get priority => _priority;
+  String get product => _product;
 
-  String get date => _date;
+  String get store => _store;
 
   set title(String newTitle) {
     if (newTitle.length <= 255) {
@@ -32,14 +32,14 @@ class Note {
     }
   }
 
-  set priority(int newPriority) {
-    if (newPriority >= 1 && newPriority <= 2) {
-      this._priority = newPriority;
-    }
+  set product(String newPriority) {
+
+      this._product = newPriority;
+
   }
 
-  set date(String newDate) {
-    this._date = newDate;
+  set store(String newDate) {
+    this._store = newDate;
   }
 
   // Convert a Note object into a Map object
@@ -51,8 +51,8 @@ class Note {
     }
     map['title'] = _title;
     map['description'] = _description;
-    map['priority'] = _priority;
-    map['date'] = _date;
+    map['product'] = _product;
+    map['store'] = _store;
 
     return map;
   }
@@ -62,8 +62,8 @@ class Note {
     this._id = map['id'];
     this._title = map['title'];
     this._description = map['description'];
-    this._priority = map['priority'];
-    this._date = map['date'];
+    this._product = map['product'];
+    this._store = map['store'];
   }
 }
 
