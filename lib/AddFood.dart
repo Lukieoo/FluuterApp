@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_design/utills/database_helper.dart';
 import 'package:intl/intl.dart';
-import 'models/Note.dart';
+import 'models/Food.dart';
 
 class DetailsPage extends StatefulWidget {
 
@@ -162,7 +162,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           color:Colors.indigoAccent,
                           onPressed: () {
                             setState(() {
-                              debugPrint("Save button clicked");
+
                               _save();
 
                             });
@@ -213,7 +213,7 @@ class _DetailsPageState extends State<DetailsPage> {
     }
 
     if (result != 0) {  // Success
-      _showAlertDialog('Status', 'Saved Successfully');
+      _showAlertDialog('Status', 'Saved');
     } else {  // Failure
       _showAlertDialog('Status', 'Problem Saving ');
     }

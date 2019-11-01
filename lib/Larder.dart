@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_design/addnew.dart';
+import 'package:flutter_design/AddFood.dart';
 import 'package:flutter_design/utills/database_helper.dart';
+import 'dart:async';
 import 'package:sqflite/sqflite.dart';
-import 'hot.dart';
-import 'models/Note.dart';
 
-void main() => runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "tak",
-      home: Applogick(),
-    ));
-
-class Applogick extends StatefulWidget {
+import 'Fridge.dart';
+import 'models/Food.dart';
+class Applogick2 extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => SIForm();
+  State<StatefulWidget> createState() => SIForm2();
 }
 
-class SIForm extends State<Applogick> {
+class SIForm2 extends State<Applogick2> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<Note> noteList;
   int count = 0;
@@ -24,25 +19,16 @@ class SIForm extends State<Applogick> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
-      Image.network(
-        "https://i.pinimg.com/originals/77/1a/19/771a19b5cec98b3b3b1eb7094803924b.jpg",
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        fit: BoxFit.cover,
-      ),
-
-//      Image.asset(
-//    "resources/background.png",
-//      height: MediaQuery.of(context).size.height,
-//      width: MediaQuery.of(context).size.width,
-//      fit: BoxFit.cover,
-//    ),
+      Image.asset('image/bq2.jpeg',
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.cover),
       Scaffold(
-        floatingActionButton: new FloatingActionButton(
+        floatingActionButton:FloatingActionButton(
+          backgroundColor: Colors.orangeAccent,
           onPressed: () {
-            navigateToDetail(Note('', '', ''), "Fridge");
+            navigateToDetail(Note('', '', ''), "Larder");
           },
-          backgroundColor: Colors.lightBlueAccent,
           elevation: 3,
           child: const Icon(Icons.add),
         ),
@@ -62,15 +48,15 @@ class SIForm extends State<Applogick> {
                           IconButton(
                             icon: Icon(Icons.ac_unit),
                             color: Colors.white,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).pop(MaterialPageRoute(
+                                  builder: (context) => Applogick()));
+                            },
                           ),
                           IconButton(
                             icon: Icon(Icons.whatshot),
                             color: Colors.white,
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => Applogick2()));
-                            },
+                            onPressed: () {},
                           )
                         ],
                       ))
@@ -80,7 +66,7 @@ class SIForm extends State<Applogick> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Fridge',
+                Text('Larder',
                     style: TextStyle(
                         shadows: [
                           Shadow(
@@ -96,68 +82,56 @@ class SIForm extends State<Applogick> {
                 SizedBox(width: 10.0),
               ],
             ),
-            SizedBox(height: 20.0),
-            Container(
-              height: MediaQuery.of(context).size.height - 115.0,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(255, 255, 255, 0.9),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(35.0),
-                    topRight: Radius.circular(35.0)),
-              ),
+            SizedBox(height: 40.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 5.0,right: 5.0),
               child: Container(
-                  padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 45.0),
-                  height: MediaQuery.of(context).size.height - 230.0,
-                  width: 125.0,
-                  child: getNoteListView()),
+                height: MediaQuery.of(context).size.height - 115.0,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(255, 255, 255, 1),
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(35.0),
+                      topLeft: Radius.circular(35.0)),
+                ),
+                child: Container(
+                    padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 45.0),
+                    height: MediaQuery.of(context).size.height - 230.0,
+                    width: 125.0,
+                    child: getNoteListView()),
+              ),
             )
           ],
         ),
-      ),
+      )
     ]);
   }
 
-  Widget _buildFoodItem(String imgPath, String foodName, String price) {
-    return Padding(
-        padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-        child: InkWell(
-            onTap: () {},
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                    child: Row(children: [
-                  Hero(
-                      tag: imgPath + foodName + price,
-                      child: Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(imgPath),
-                                  fit: BoxFit.cover)),
-                          height: 60.0,
-                          width: 60.0)),
-                  SizedBox(width: 10.0),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(foodName,
-                            style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 17.0,
-                                fontWeight: FontWeight.bold)),
-                        Text(price,
-                            style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 15.0,
-                                color: Colors.grey))
-                      ])
-                ])),
-                IconButton(
-                    icon: Icon(Icons.add),
-                    color: Colors.black,
-                    onPressed: () {})
-              ],
-            )));
+  Color getPriorityColor(int priority) {
+    switch (priority) {
+      case 1:
+        return Colors.red;
+        break;
+      case 2:
+        return Colors.yellow;
+        break;
+
+      default:
+        return Colors.yellow;
+    }
+  }
+
+  Icon getPriorityIcon(int priority) {
+    switch (priority) {
+      case 1:
+        return Icon(Icons.play_arrow);
+        break;
+      case 2:
+        return Icon(Icons.keyboard_arrow_right);
+        break;
+
+      default:
+        return Icon(Icons.keyboard_arrow_right);
+    }
   }
 
   void _delete(BuildContext context, Note note) async {
@@ -248,7 +222,7 @@ class SIForm extends State<Applogick> {
   }
 
   Padding draw(int position, TextStyle titleStyle) {
-    if (this.noteList[position].store == "Fridge") {
+    if (this.noteList[position].store == "Larder") {
       return Padding(
         padding: EdgeInsets.only(left: 10.0, right: 10.0),
         child: Card(
@@ -276,7 +250,7 @@ class SIForm extends State<Applogick> {
                 color: Colors.black,
               ),
               onTap: () {
-                _delete(context, noteList[position]);
+                _showDialog(position);
               },
             ),
           ),
@@ -285,5 +259,34 @@ class SIForm extends State<Applogick> {
     } else {
       return Padding(padding: EdgeInsets.only(left: 0, right: 0));
     }
+  }
+  void _showDialog(int position) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:  Text("Delete food"),
+          content:  Text("Delete this food for your staff ?"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+
+            FlatButton(
+                child: Text("DELETE"),
+                onPressed: () {
+                  _delete(context, noteList[position]);
+                  Navigator.of(context).pop();
+                }),
+            FlatButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

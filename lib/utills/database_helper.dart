@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter_design/models/Note.dart';
+import 'package:flutter_design/models/Food.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';

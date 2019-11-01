@@ -52,6 +52,8 @@ flutter:
    - image/site5.png
    - image/site6.png
    - image/site7.png
+   - image/bq2.jpeg
+   - image/bq1.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
