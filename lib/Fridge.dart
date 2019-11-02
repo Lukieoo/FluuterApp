@@ -97,12 +97,17 @@ class SIForm extends State<Applogick> {
             Padding(
               padding: const EdgeInsets.only(left: 5.0, right: 5.0),
               child: Container(
-                height: MediaQuery.of(context).size.height - 115.0,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height - 215.0,
                 decoration: BoxDecoration(
                   color: Color.fromRGBO(255, 255, 255, 1),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(35.0),
-                      topRight: Radius.circular(35.0)),
+                      topRight: Radius.circular(35.0),
+                      bottomLeft: Radius.circular(35.0),
+                      bottomRight: Radius.circular(35.0)),
                 ),
                 child: Container(
                     padding:
@@ -151,10 +156,12 @@ class SIForm extends State<Applogick> {
     dbFuture.then((database) {
       Future<List<Note>> noteListFuture = databaseHelper.getNoteList();
       noteListFuture.then((noteList) {
-        setState(() {
-          this.noteList = noteList;
-          this.count = noteList.length;
-        });
+        if (mounted){
+          setState(() {
+            this.noteList = noteList;
+            this.count = noteList.length;
+          });
+        }
       });
     });
   }
@@ -274,4 +281,5 @@ class SIForm extends State<Applogick> {
       },
     );
   }
+
 }

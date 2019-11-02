@@ -6,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'Fridge.dart';
 import 'models/Food.dart';
+
 class Applogick2 extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => SIForm2();
@@ -19,12 +20,12 @@ class SIForm2 extends State<Applogick2> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
-      Image.asset('image/bq2.jpeg',
+      Image.asset('image/bq2.jpg',
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           fit: BoxFit.cover),
       Scaffold(
-        floatingActionButton:FloatingActionButton(
+        floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.orangeAccent,
           onPressed: () {
             navigateToDetail(Note('', '', ''), "Larder");
@@ -84,17 +85,20 @@ class SIForm2 extends State<Applogick2> {
             ),
             SizedBox(height: 40.0),
             Padding(
-              padding: const EdgeInsets.only(left: 5.0,right: 5.0),
+              padding: const EdgeInsets.only(left: 5.0, right: 5.0),
               child: Container(
-                height: MediaQuery.of(context).size.height - 115.0,
+                height: MediaQuery.of(context).size.height - 215.0,
                 decoration: BoxDecoration(
                   color: Color.fromRGBO(255, 255, 255, 1),
                   borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(35.0),
                       topRight: Radius.circular(35.0),
-                      topLeft: Radius.circular(35.0)),
+                      bottomLeft: Radius.circular(35.0),
+                      bottomRight: Radius.circular(35.0)),
                 ),
                 child: Container(
-                    padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 45.0),
+                    padding:
+                        EdgeInsets.only(left: 10.0, right: 10.0, top: 45.0),
                     height: MediaQuery.of(context).size.height - 230.0,
                     width: 125.0,
                     child: getNoteListView()),
@@ -167,10 +171,13 @@ class SIForm2 extends State<Applogick2> {
     dbFuture.then((database) {
       Future<List<Note>> noteListFuture = databaseHelper.getNoteList();
       noteListFuture.then((noteList) {
-        setState(() {
-          this.noteList = noteList;
-          this.count = noteList.length;
-        });
+        if (mounted){
+          setState(() {
+            this.noteList = noteList;
+            this.count = noteList.length;
+          });
+        }
+
       });
     });
   }
@@ -260,6 +267,7 @@ class SIForm2 extends State<Applogick2> {
       return Padding(padding: EdgeInsets.only(left: 0, right: 0));
     }
   }
+
   void _showDialog(int position) {
     // flutter defined function
     showDialog(
@@ -267,8 +275,8 @@ class SIForm2 extends State<Applogick2> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title:  Text("Delete food"),
-          content:  Text("Delete this food for your staff ?"),
+          title: Text("Delete food"),
+          content: Text("Delete this food for your staff ?"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
 
