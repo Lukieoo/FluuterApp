@@ -5,11 +5,6 @@ import 'package:sqflite/sqflite.dart';
 import 'Larder.dart';
 import 'models/Food.dart';
 
-void main() => runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Food",
-      home: Applogick(),
-    ));
 
 class Applogick extends StatefulWidget {
   @override
