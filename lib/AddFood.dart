@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_design/utills/database_helper.dart';
+import 'package:intl/intl.dart';
+import 'models/Food.dart';
 
 class DetailsPage extends StatefulWidget {
-  final heroTag;
-  final foodName;
-  final foodPrice;
 
-  DetailsPage({this.heroTag, this.foodName, this.foodPrice});
+
+
+  final Note note;
+  final selectedCard;
+  DetailsPage(this. note,this.selectedCard);
 
   @override
-  _DetailsPageState createState() => _DetailsPageState();
+  _DetailsPageState createState() => _DetailsPageState(this.note,this.selectedCard);
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  var selectedCard = 'Fridge';
-  var selectedCardImage = 'Fruit';
+
+  var selectedCard ;
+  var selectedCardImage = 'Dairy products';
+  Note note;
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
+  DatabaseHelper helper = DatabaseHelper();
+  _DetailsPageState(this.note,this.selectedCard);
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +65,38 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    SizedBox(height: 20.0),
+                    TextField(
+                      controller: titleController,
+
+                      onChanged: (value) {
+                        debugPrint('Something changed in Title Text Field');
+                        updateTitle();
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Title',
+
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0)
+                          )
+                      ),
+                    ),
+                    SizedBox(height: 20.0),
+                    TextField(
+                      controller: descriptionController,
+
+                      onChanged: (value) {
+                        debugPrint('Something changed in Description Text Field');
+                        updateDescription();
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Description',
+
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0)
+                          )
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text("Store",
@@ -63,6 +106,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             color: Colors.black,
                           )),
                     ),
+                    SizedBox(height: 5.0),
                     Container(
                         height: 100.0,
                         child: ListView(
@@ -88,7 +132,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: <Widget>[
-                            _buildInfoCardIMage('image/site1.png','Dairy products '),
+                            _buildInfoCardIMage('image/site1.png','Dairy products'),
                             SizedBox(width: 10.0),
                             _buildInfoCardIMage('image/site2.png','Meat, fats'),
                             SizedBox(width: 10.0),
@@ -104,25 +148,26 @@ class _DetailsPageState extends State<DetailsPage> {
                             SizedBox(width: 10.0),
                           ],
                         )),
-                    SizedBox(height: 20.0),
-                    TextField(
-                      decoration: InputDecoration(hintText: 'Enter a title'),
-                    ),
-                    SizedBox(height: 20.0),
-                    TextField(
-                      decoration: InputDecoration(
-                          hintText: 'Enter a short description'),
-                    ),
+
                     SizedBox(height: 20.0),
                     Center(
-                      child: RaisedButton(
 
-                        child: Text("OK",),
-                        textColor: Colors.white,
-                        color:Colors.indigoAccent,
-                        onPressed: () {
+                      child: ButtonTheme(
+                        minWidth: 200.0,
+                        child: RaisedButton(
 
-                        },
+                          child: Text("OK",),
+
+                          textColor: Colors.white,
+                          color:Colors.indigoAccent,
+                          onPressed: () {
+                            setState(() {
+
+                              _save();
+
+                            });
+                          },
+                        ),
                       ),
                     )
                   ],
@@ -130,7 +175,64 @@ class _DetailsPageState extends State<DetailsPage> {
           ])
         ]));
   }
+  void updateTitle(){
+    if(note.title==null){
+      note.title="";
+    }else{
+      note.title = titleController.text;
+    }
 
+  }
+
+  // Update the description of Note object
+  void updateDescription() {
+    if(note.title==null){
+      note.description="";
+    }else{
+      note.description = descriptionController.text;
+    }
+
+  }
+  void _save() async {
+
+    moveToLastScreen();
+    if(note.title==null){
+      note.title="";
+    }
+    if(note.description==null){
+      note.description=DateFormat.yMMMd().format(DateTime.now());;
+    }
+    note.product =selectedCardImage;
+    note.store = selectedCard;
+
+    int result;
+    if (note.id != null) {  // Case 1: Update operation
+      result = await helper.updateNote(note);
+    } else { // Case 2: Insert Operation
+      result = await helper.insertNote(note);
+    }
+
+    if (result != 0) {  // Success
+      _showAlertDialog('Status', 'Saved');
+    } else {  // Failure
+      _showAlertDialog('Status', 'Problem Saving ');
+    }
+
+  }
+  void _showAlertDialog(String title, String message) {
+
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+    showDialog(
+        context: context,
+        builder: (_) => alertDialog
+    );
+  }
+  void moveToLastScreen() {
+    Navigator.pop(context, true);
+  }
   Widget _buildInfoCard(String cardTitle) {
     return InkWell(
         onTap: () {
